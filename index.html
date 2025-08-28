@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe – The Classic Game, Reimagined</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        
+        <div class="game-options">
+            <button id="mode-2player" class="active">Player vs Player</button>
+            <button id="mode-cpu">Player vs CPU</button>
+        </div>
+
+        <div class="game-info">
+            <p id="status-message">Player X's Turn</p>
+        </div>
+
+        <div class="game-board">
+            <div class="cell" data-cell-index="0"></div>
+            <div class="cell" data-cell-index="1"></div>
+            <div class="cell" data-cell-index="2"></div>
+            <div class="cell" data-cell-index="3"></div>
+            <div class="cell" data-cell-index="4"></div>
+            <div class="cell" data-cell-index="5"></div>
+            <div class="cell" data-cell-index="6"></div>
+            <div class="cell" data-cell-index="7"></div>
+            <div class="cell" data-cell-index="8"></div>
+        </div>
+
+        <div class="controls">
+            <button id="reset-button">Reset Game</button>
+            <button id="undo-button" class="hidden">Undo</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box x-wins">
+                <span>X Wins:</span>
+                <span id="x-wins-count">0</span>
+            </div>
+            <div class="stat-box o-wins">
+                <span>O Wins:</span>
+                <span id="o-wins-count">0</span>
+            </div>
+            <div class="stat-box draws">
+                <span>Draws:</span>
+                <span id="draws-count">0</span>
+            </div>
+        </div>
+        
+        <div class="themes">
+            <button id="theme-light" class="active">Light Mode</button>
+            <button id="theme-dark">Dark Mode</button>
+            <button id="theme-neon">Neon Mode</button>
+        </div>
+    </div>
+    
+    <audio id="click-sound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" preload="auto"></audio>
+    <audio id="draw-sound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" preload="auto"></audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
