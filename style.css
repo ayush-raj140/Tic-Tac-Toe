@@ -1,0 +1,295 @@
+/* ---------------------------
+   Base + Variables
+---------------------------- */
+:root {
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+
+  --primary: #2563eb;   /* blue */
+  --primary-ghost: rgba(37, 99, 235, 0.15);
+
+  --x: #ef4444;         /* red for X */
+  --o: #10b981;         /* emerald for O */
+
+  --accent: #a78bfa;    /* soft purple */
+  --ring: rgba(37, 99, 235, 0.35);
+
+  --cell-border: #e5e7eb;
+  --shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Dark theme */
+body.dark {
+  --bg: #0b0f19;
+  --panel: #121826;
+  --text: #e5e7eb;
+  --muted: #9aa1ac;
+
+  --primary: #60a5fa;
+  --primary-ghost: rgba(96, 165, 250, 0.15);
+
+  --x: #fb7185;
+  --o: #34d399;
+
+  --accent: #22d3ee; /* cyan pop */
+  --ring: rgba(96, 165, 250, 0.4);
+
+  --cell-border: #1f2937;
+  --shadow: 0 12px 30px rgba(0,0,0,0.45);
+}
+
+/* Neon theme */
+body.neon {
+  --bg: #0a0a0a;
+  --panel: #0f0f14;
+  --text: #f0f0ff;
+  --muted: #b3b3cc;
+
+  --primary: #00e5ff;           /* neon cyan */
+  --primary-ghost: rgba(0, 229, 255, 0.18);
+
+  --x: #ff2975;                 /* neon pink */
+  --o: #00ff9c;                 /* neon green */
+
+  --accent: #7c4dff;            /* neon purple */
+  --ring: rgba(0, 229, 255, 0.55);
+
+  --cell-border: #1b1b24;
+  --shadow: 0 0 30px rgba(0,229,255,0.15), 0 12px 30px rgba(0,0,0,0.55);
+}
+
+/* ---------------------------
+   Resets
+---------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-family: 'Roboto', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% -10%, var(--primary-ghost), transparent) no-repeat,
+              radial-gradient(1000px 700px at 120% 20%, color-mix(in oklab, var(--accent) 20%, transparent), transparent) no-repeat,
+              var(--bg);
+  color: var(--text);
+}
+
+/* ---------------------------
+   Layout
+---------------------------- */
+.container {
+  max-width: 900px;
+  margin: 48px auto;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid color-mix(in oklab, var(--panel), #000 6%);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 2.2vw + 14px, 44px);
+  letter-spacing: 0.5px;
+}
+
+.game-options,
+.controls,
+.themes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.game-info {
+  margin: 8px 0 20px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--primary-ghost) 65%, transparent);
+  border: 1px dashed color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+#status-message {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* ---------------------------
+   Buttons
+---------------------------- */
+button {
+  appearance: none;
+  border: 1px solid color-mix(in oklab, var(--panel), #000 10%);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--panel), #fff 6%), var(--panel));
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .15s ease, border-color .15s ease, background .2s ease;
+  box-shadow: 0 2px 0 color-mix(in oklab, var(--panel), #000 10%);
+}
+
+button:hover { transform: translateY(-1px); }
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+button.active {
+  border-color: color-mix(in oklab, var(--primary), #000 15%);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--primary), #fff 10%), var(--primary));
+  color: #fff;
+  box-shadow: 0 6px 18px color-mix(in oklab, var(--primary), #000 35%);
+}
+
+.controls #reset-button {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--accent), #fff 10%), var(--accent));
+  color: #fff;
+  border-color: color-mix(in oklab, var(--accent), #000 18%);
+}
+
+.controls #undo-button {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--primary), #fff 10%), var(--primary));
+  color: #fff;
+  border-color: color-mix(in oklab, var(--primary), #000 18%);
+}
+
+/* Simple utility to hide things (your JS toggles this) */
+.hidden { display: none !important; }
+
+/* ---------------------------
+   Board
+---------------------------- */
+.game-board {
+  margin: 22px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 12px;
+  max-width: 520px;
+  user-select: none;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: 2px solid var(--cell-border);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--panel), #fff 6%), var(--panel));
+  display: grid;
+  place-items: center;
+  font-size: clamp(34px, 8vw, 72px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 0 color-mix(in oklab, var(--panel), #000 15%);
+  transition: transform .08s ease, box-shadow .15s ease, border-color .2s ease, background .2s ease;
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--panel), #fff 14%), 0 6px 18px rgba(0,0,0,0.06);
+  cursor: pointer;
+}
+
+.cell:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--panel), #fff 14%), 0 10px 24px rgba(0,0,0,0.10);
+}
+
+.cell:active { transform: translateY(0); }
+
+/* Colors when JS applies classes: .x or .o */
+.cell.x { color: var(--x); border-color: color-mix(in oklab, var(--x), #000 20%); }
+.cell.o { color: var(--o); border-color: color-mix(in oklab, var(--o), #000 20%); }
+
+/* Optional highlight classes your JS can toggle */
+.cell.win {
+  animation: pulseWin 1s ease-in-out infinite alternate;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary), transparent 50%), 0 10px 30px rgba(0,0,0,0.14);
+}
+
+.cell.last-move::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  border: 2px dashed color-mix(in oklab, var(--primary), transparent 40%);
+  pointer-events: none;
+}
+
+@keyframes pulseWin {
+  from { transform: translateY(-1px) scale(1.00); }
+  to   { transform: translateY(-2px) scale(1.02); }
+}
+
+/* ---------------------------
+   Stats
+---------------------------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 16px 0 8px;
+}
+
+.stat-box {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--panel), #fff 6%), var(--panel));
+  border: 1px solid color-mix(in oklab, var(--panel), #000 10%);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+.stat-box span:first-child {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.stat-box.x-wins { border-left: 4px solid var(--x); }
+.stat-box.o-wins { border-left: 4px solid var(--o); }
+.stat-box.draws  { border-left: 4px solid var(--accent); }
+
+/* ---------------------------
+   Themes row
+---------------------------- */
+.themes button {
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+
+/* Give each theme a tiny preview ring when active */
+#theme-light.active { box-shadow: 0 0 0 3px color-mix(in oklab, #fff, var(--ring)); }
+#theme-dark.active  { box-shadow: 0 0 0 3px color-mix(in oklab, #000, var(--ring)); }
+#theme-neon.active  { box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent), var(--ring)); }
+
+/* ---------------------------
+   Responsiveness
+---------------------------- */
+@media (max-width: 720px) {
+  .container { margin: 24px 12px; padding: 18px; }
+  .game-board { max-width: 100%; gap: 10px; }
+  .stats { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------
+   Nice selection + scrollbar
+---------------------------- */
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--primary), #000 15%);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track { background: color-mix(in oklab, var(--bg), #000 4%); }
